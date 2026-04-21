@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+._*
+
+# Editor crud
+*.swp
+*~
+.vscode/
+
+# OS / build artefacts
+Thumbs.db
+node_modules/
