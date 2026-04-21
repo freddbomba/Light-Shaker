@@ -10,3 +10,5 @@
 # OS / build artefacts
 Thumbs.db
 node_modules/
+DEVLOG.md
+.worksession
