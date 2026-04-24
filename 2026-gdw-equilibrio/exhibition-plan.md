@@ -106,3 +106,51 @@ in dialogo.
 - Testo a parete / didascalia al piano superiore?
 - Accesso del pubblico: libero in cantina o solo visione
   dalla scala?
+
+---
+
+## Sistema di controllo — decisioni tecniche
+
+### Hardware
+Orange Pi 4 Pro 6GB — da installare ex novo.
+
+### OS
+Debian 12 Bookworm ARM64 (immagine ufficiale Orange Pi).
+Stessa base di agape.local — stesso apt, stesse abitudini.
+Evitare OrangeOS.
+
+### Software di sintesi audio: Python + pyo
+
+Scelta preferita rispetto a Sonic Pi (pesante, headless problematico)
+e SuperCollider (meno coerente con lo stack esistente).
+
+Motivazioni:
+- pyo è una libreria di sintesi audio Python, headless nativo
+- l'algoritmo Hénon è già prototipato in Python (docs/henon-tarot-research.md)
+- coerente con lo stack esistente (bot Telegram, ogigia-api, reteabicirc)
+- un processo solo: sintesi + algoritmo + controllo
+- autostart via systemd, accesso remoto via SSH/WiFi
+
+### Piano di installazione Orange Pi
+
+1. Flash Debian 12 Bookworm ARM64 su eMMC
+2. Setup base: SSH, WiFi, Tailscale
+3. pip install pyo --break-system-packages
+4. Script henon_audio.py: algoritmo Hénon → sintesi → jack audio out
+5. Autostart via systemd service
+6. Test: 24h continuative headless senza crash
+
+### Accesso remoto in loco
+
+Tailscale già nel proprio ecosistema — accesso da bohemoth o
+telefono durante la Design Week per modificare parametri in tempo
+reale senza toccare il dispositivo fisicamente.
+
+### Modalità operative (via switch fisico + jack)
+
+| Modalità | Sorgente audio |
+|---|---|
+| Standalone | Python/pyo + algoritmo Hénon |
+| Performativa | Hénon + microfono (switch ON) |
+| Live in | Hénon + strumento esterno (jack in) |
+
